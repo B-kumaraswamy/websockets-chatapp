@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const frontendPath = path.resolve(__dirname, "../../frontend/dist");
 
 dotenv.config();
 
@@ -31,9 +32,9 @@ app.use("/api/messages", messageRoutes);
 
 // This code helps your backend (Express) serve your frontend (React) when you're running your app in a production environment — like on Render, Railway, or VPS.
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  app.use(express.static(frontendPath));
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+    res.sendFile(path.resolve(frontendPath,  "index.html"));
   });
 }
 
