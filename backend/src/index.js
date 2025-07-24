@@ -7,6 +7,10 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { app, server as socketServer, io } from "./lib/socket.js";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -20,7 +24,6 @@ app.use(
 );
 
 const PORT = process.env.PORT || 5000;
-const __dirname = path.resolve();
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
