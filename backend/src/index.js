@@ -32,7 +32,7 @@ app.use("/api/messages", messageRoutes);
 // This code helps your backend (Express) serve your frontend (React) when you're running your app in a production environment — like on Render, Railway, or VPS.
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
-  app.get("/*", (req, res) => {
+  app.get("/{*}", (req, res) => {
     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
   });
 }
