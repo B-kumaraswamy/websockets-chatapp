@@ -14,7 +14,8 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // to increase the profilePic size
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(
   cors({
@@ -31,7 +32,7 @@ app.use("/api/messages", messageRoutes);
 // This code helps your backend (Express) serve your frontend (React) when you're running your app in a production environment — like on Render, Railway, or VPS.
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
-  app.get("*", (req, res) => {
+  app.get("/(.*)/", (req, res) => {
     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
   });
 }
