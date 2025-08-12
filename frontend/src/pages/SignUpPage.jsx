@@ -12,10 +12,13 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { useAuthStore } from "../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { signup, isSigningUp } = useAuthStore();
+  const { signup, isLoading } = useAuthStore();
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -23,8 +26,15 @@ const SignUpPage = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    signup(data); // call your Zustand signup function
+  const onSubmit = async (data) => {
+    try {
+      await signup(data);
+      navigate("/verify-email");
+    }
+    catch(error) {
+      console.log("Error while signing up", error);
+    } 
+
   };
 
   return (
@@ -148,9 +158,9 @@ const SignUpPage = () => {
             <button
               type="submit"
               className="btn btn-primary w-full"
-              disabled={isSigningUp}
+              disabled={isLoading}
             >
-              {isSigningUp ? (
+              {isLoading ? (
                 <>
                   <Loader2 className="size-5 animate-spin" />
                   <span className="ml-2">Loading...</span>

@@ -102,6 +102,15 @@ const LoginPage = () => {
                   {errors.password.message}
                 </p>
               )}
+              <div className="text-right mt-1">
+                <Link
+                  to="/forgot-password"
+                  state={{ fromLogin: true }}
+                  className="link link-primary text-sm font-medium"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
             </div>
 
             {/* Submit Button */}

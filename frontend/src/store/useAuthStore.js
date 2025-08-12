@@ -7,12 +7,15 @@ const BASE_URL =
   import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
 export const useAuthStore = create((set, get) => ({
   authUser: null,
-  isSigningUp: false,
+  isLoading: false,
   isLoggingIn: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
   onlineUsers: [],
   socket: null,
+  error: null,
+  setError: (msg) => set({ error: msg }),
+
   checkAuth: async () => {
     try {
       const response = await axiosInstance.get("/auth/check");
@@ -26,17 +29,72 @@ export const useAuthStore = create((set, get) => ({
     }
   },
   signup: async (data) => {
-    set({ isSigningUp: true });
+    set({ isLoading: true });
     try {
-      const response = await axiosInstance.post("/auth/signup", data);
-      set({ authUser: response.data });
-      toast.success("Account created successfully");
+      await axiosInstance.post("/auth/signup", data);
+    } catch (error) {
+      const msg =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Signup failed";
+      toast.error(msg);
+      throw new Error(msg);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  verifyEmail: async (code) => {
+    set({ isLoading: true });
+    try {
+      const response = await axiosInstance.post("/auth/verify-email", { code });
+      set({
+        authUser: response.data.user,
+      });
       get().connectSocket();
+      toast.success("Account created successfully");
     } catch (error) {
       toast.error(error.response.data.message);
-      console.log("Error in signup store", error.response?.data.message);
+      set({ error: error.response.data.message });
+      console.log("Error in verifyEmail store", error.response?.data.message);
     } finally {
-      set({ isSigningUp: false });
+      set({ isLoading: false });
+    }
+  },
+
+  forgotPassword: async (email) => {
+    set({ isLoading: true });
+    try {
+      const response = await axiosInstance.post("/auth/forgot-password", {
+        email,
+      });
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log(
+        "Error in forgotPassword store",
+        error.response?.data.message,
+      );
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  resetPassword: async (token, password) => {
+    set({ isLoading: true });
+    try {
+      const response = await axiosInstance.post(
+        `/auth/reset-password/${token}`,
+        {
+          password,
+        },
+      );
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log("Error in resetPassword store", error.response?.data.message);
+    } finally {
+      set({ isLoading: false });
     }
   },
 

@@ -6,6 +6,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      validate: {
+        validator: function (v) {
+          return /^[\w.-]+@(gmail\.com|yahoo\.com|outlook\.com)$/i.test(v);
+        },
+        message: () => "Please enter a valid email address",
+      },
     },
     fullName: {
       type: String,
@@ -20,6 +26,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    lastlogin: {
+      type: Date,
+      default: Date.now,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    resetPasswordToken: String,
+    resetPasswordTokenExpiresAt: Date,
+    verificationToken: String,
+    verificationTokenExpiresAt: Date,
   },
   {
     timestamps: true,

@@ -3,9 +3,12 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import EmailVerification from "./pages/EmailVerification";
+import ForgotPassword from "./pages/ForgotPassword";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
+import ResetPassword from "./pages/ResetPassword";
 import SettingsPage from "./pages/SettingsPage";
 import SignUpPage from "./pages/SignUpPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -66,6 +69,19 @@ const App = () => {
             </PublicRoute>
           }
         />
+
+        <Route
+          path="/verify-email"
+          element={
+            <ProtectedRoute>
+              <EmailVerification />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
       <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />

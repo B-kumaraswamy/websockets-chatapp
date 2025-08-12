@@ -130,6 +130,15 @@ const ProfilePage = () => {
                 <span className="text-base-content/80">Account Status</span>
                 <span className="text-success">Active</span>
               </div>
+              <div className="flex items-center justify-between py-2 border-b border-base-content/10">
+                <span className="text-base-content/80">Last Login</span>
+                <span className="text-base-content">
+                  {new Intl.DateTimeFormat("en-US", {
+                    dateStyle: "long",
+                    timeStyle: "short",
+                  }).format(new Date(authUser.lastlogin))}
+                </span>
+              </div>
             </div>
           </div>
         </div>
