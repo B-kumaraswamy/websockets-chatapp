@@ -73,9 +73,9 @@ const App = () => {
         <Route
           path="/verify-email"
           element={
-            <ProtectedRoute>
+            <PublicRoute>
               <EmailVerification />
-            </ProtectedRoute>
+            </PublicRoute>
           }
         />
 
